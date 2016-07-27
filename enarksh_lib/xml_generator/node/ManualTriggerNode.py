@@ -24,6 +24,6 @@ class ManualTriggerNode(Node):
         """
         manual_trigger = SubElement(xml_tree, 'ManualTrigger')
 
-        super().generate_xml(manual_trigger)
+        Node.generate_xml(self, manual_trigger)
 
 # ----------------------------------------------------------------------------------------------------------------------

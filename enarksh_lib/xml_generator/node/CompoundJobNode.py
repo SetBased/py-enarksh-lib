@@ -22,6 +22,6 @@ class CompoundJobNode(Node):
         """
         compound_job = SubElement(xml_tree, 'CompoundJob')
 
-        super().generate_xml(compound_job)
+        Node.generate_xml(self, compound_job)
 
 # ----------------------------------------------------------------------------------------------------------------------

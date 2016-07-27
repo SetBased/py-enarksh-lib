@@ -40,7 +40,7 @@ class CommandJobNode(Node):
         """
         command_job = SubElement(xml_tree, 'CommandJob')
 
-        super().generate_xml(command_job)
+        Node.generate_xml(self, command_job)
 
         path = SubElement(command_job, 'Path')
         path.text = self.path

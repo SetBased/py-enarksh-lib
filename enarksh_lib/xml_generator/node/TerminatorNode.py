@@ -24,6 +24,6 @@ class TerminatorNode(Node):
         """
         terminator = SubElement(xml_tree, 'Terminator')
 
-        super().generate_xml(terminator)
+        Node.generate_xml(self, terminator)
 
 # ----------------------------------------------------------------------------------------------------------------------
