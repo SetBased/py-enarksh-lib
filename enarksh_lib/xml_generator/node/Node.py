@@ -250,7 +250,7 @@ class Node:
 
         :param string name:
 
-        :rtype: None\enarksh_lib.xml_generator.node.Node.Node
+        :rtype: None|enarksh_lib.xml_generator.node.Node.Node
         """
         ret = self.search_child_node(name)
         if not ret:
@@ -293,7 +293,7 @@ class Node:
 
         :param string name:
 
-        :rtype: None\enarksh_lib.xml_generator.port.Port.Port
+        :rtype: None|enarksh_lib.xml_generator.port.Port.Port
         """
         ret = self.search_input_port(name)
 
@@ -485,7 +485,7 @@ class Node:
 
         :param str name:
 
-        :rtype: None\enarksh_lib.xml_generator.node.Node.Node
+        :rtype: None|enarksh_lib.xml_generator.node.Node.Node
         """
         ret = None
         for node in self._child_nodes:
@@ -503,7 +503,7 @@ class Node:
 
         :param str name:
 
-        :rtype: None\enarksh_lib.xml_generator.port.InputPort.InputPort
+        :rtype: None|enarksh_lib.xml_generator.port.InputPort.InputPort
         """
         ret = None
         for port in self._input_ports:
@@ -521,7 +521,7 @@ class Node:
 
         :param str name:
 
-        :rtype: None\enarksh_lib.xml_generator.port.InputPort.InputPort
+        :rtype: None|enarksh_lib.xml_generator.port.InputPort.InputPort
         """
         ret = None
         for port in self._output_ports:
