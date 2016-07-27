@@ -1,9 +1,15 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 from xml.etree.ElementTree import SubElement
 
-from lib.enarksh_lib.xml_generator.node.Node import Node
+from enarksh_lib.xml_generator.node.Node import Node
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class TerminatorNode(Node):
     """
     Class for generating XML messages for elements of type 'TerminatorType'.

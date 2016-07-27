@@ -1,10 +1,16 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 from xml.etree.ElementTree import SubElement
 
-from lib.enarksh_lib.xml_generator.port.InputPort import InputPort
-from lib.enarksh_lib.xml_generator.port.OutputPort import OutputPort
+from enarksh_lib.xml_generator.port.InputPort import InputPort
+from enarksh_lib.xml_generator.port.OutputPort import OutputPort
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class Node:
     """
     Class for generating XML messages for elements of type 'NodeType'.
@@ -70,7 +76,7 @@ class Node:
         """
         The parent node of this node.
 
-        :type: lib.enarksh_lib.xml_generator.node.Node.Node
+        :type: enarksh_lib.xml_generator.node.Node.Node
         """
 
         self._resources = []
@@ -106,7 +112,7 @@ class Node:
         """
         Adds a consumption as a consumption of this node.
 
-        :param lib.enarksh_lib.xml_generator.node.consumption.Consumption.Consumption consumption:
+        :param enarksh_lib.xml_generator.node.consumption.Consumption.Consumption consumption:
         """
         # -- @todo test consumption exists.
 
@@ -166,7 +172,7 @@ class Node:
         """
         Adds resource 'resource' as a resource of this node.
 
-        :param lib.enarksh_lib.xml_generator.resource.Resource.Resource resource:
+        :param enarksh_lib.xml_generator.resource.Resource.Resource resource:
         """
         # -- @todo Test resource exists.
 
@@ -244,7 +250,7 @@ class Node:
 
         :param string name:
 
-        :rtype: None\lib.enarksh_lib.xml_generator.node.Node.Node
+        :rtype: None\enarksh_lib.xml_generator.node.Node.Node
         """
         ret = self.search_child_node(name)
         if not ret:
@@ -287,7 +293,7 @@ class Node:
 
         :param string name:
 
-        :rtype: None\lib.enarksh_lib.xml_generator.port.Port.Port
+        :rtype: None\enarksh_lib.xml_generator.port.Port.Port
         """
         ret = self.search_input_port(name)
 
@@ -304,7 +310,7 @@ class Node:
         """
         Returns all input ports of this node.
 
-        :rtype: list[lib.enarksh_lib.xml_generator.port.InputPort.InputPort]
+        :rtype: list[enarksh_lib.xml_generator.port.InputPort.InputPort]
         """
         return self._input_ports
 
@@ -324,7 +330,7 @@ class Node:
 
         :param str name:
 
-        :rtype: lib.enarksh_lib.xml_generator.port.Port.Port
+        :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
         ret = self.search_output_port(name)
 
@@ -341,7 +347,7 @@ class Node:
         """
         Returns all output ports of this node.
 
-        :rtype: list[lib.enarksh_lib.xml_generator.port.OutputPort.OutputPort
+        :rtype: list[enarksh_lib.xml_generator.port.OutputPort.OutputPort
         """
         return self._output_ports
 
@@ -350,7 +356,7 @@ class Node:
         """
         Returns the parent node of this node.
 
-        :rtype: lib.enarksh_lib.xml_generator.node.Node.Node
+        :rtype: enarksh_lib.xml_generator.node.Node.Node
         """
         return self._parent
 
@@ -382,7 +388,7 @@ class Node:
 
         :param str name: The name of port.
 
-        :rtype: lib.enarksh_lib.xml_generator.port.Port.Port
+        :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
         # -- @todo test port already exists.
 
@@ -398,7 +404,7 @@ class Node:
 
         :param str name: The name of port.
 
-        :rtype: lib.enarksh_lib.xml_generator.port.Port.Port
+        :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
         # -- @todo test port already exists.
 
@@ -479,7 +485,7 @@ class Node:
 
         :param str name:
 
-        :rtype: None\lib.enarksh_lib.xml_generator.node.Node.Node
+        :rtype: None\enarksh_lib.xml_generator.node.Node.Node
         """
         ret = None
         for node in self._child_nodes:
@@ -497,7 +503,7 @@ class Node:
 
         :param str name:
 
-        :rtype: None\lib.enarksh_lib.xml_generator.port.InputPort.InputPort
+        :rtype: None\enarksh_lib.xml_generator.port.InputPort.InputPort
         """
         ret = None
         for port in self._input_ports:
@@ -515,7 +521,7 @@ class Node:
 
         :param str name:
 
-        :rtype: None\lib.enarksh_lib.xml_generator.port.InputPort.InputPort
+        :rtype: None\enarksh_lib.xml_generator.port.InputPort.InputPort
         """
         ret = None
         for port in self._output_ports:

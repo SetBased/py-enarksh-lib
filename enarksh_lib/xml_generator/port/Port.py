@@ -1,8 +1,14 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 import abc
 from xml.etree.ElementTree import SubElement
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class Port:
     """
     Class Port
@@ -24,28 +30,28 @@ class Port:
         """
         The node of which this port is a port.
 
-        :type: lib.enarksh_lib.xml_generator.node.Node.Node
+        :type: enarksh_lib.xml_generator.node.Node.Node
         """
 
         self._port_name = port_name
         """
         The name of this port.
 
-        :type: lib.enarksh_lib.xml_generator.port.Port.Port
+        :type: enarksh_lib.xml_generator.port.Port.Port
         """
 
         self._predecessors = []
         """
         The dependencies of this port.
 
-        :type: list[lib.enarksh_lib.xml_generator.port.Port.Port]
+        :type: list[enarksh_lib.xml_generator.port.Port.Port]
         """
 
         self._successors = []
         """
         The dependants of this port.
 
-        :type: list[lib.enarksh_lib.xml_generator.port.Port.Port]
+        :type: list[enarksh_lib.xml_generator.port.Port.Port]
         """
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -53,7 +59,7 @@ class Port:
         """
         Add a port as a dependency of this port.
 
-        :param lib.enarksh_lib.xml_generator.port.Port.Port port:
+        :param enarksh_lib.xml_generator.port.Port.Port port:
         """
         # -- @todo Validate owner of port and owner of this port.
 
@@ -80,14 +86,14 @@ class Port:
         """
         Returns all the dependencies of this port.
 
-        :rtype: lib.enarksh_lib.xml_generator.port.Port.Port port:
+        :rtype: enarksh_lib.xml_generator.port.Port.Port port:
         """
         return self._predecessors
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_dependencies_ports(self, ports, level):
         """
-        :param list[lib.enarksh_lib.xml_generator.port.Port.Port] ports:
+        :param list[enarksh_lib.xml_generator.port.Port.Port] ports:
         :param int                                                level:
 
         :rtype: list[]
@@ -102,7 +108,7 @@ class Port:
     @abc.abstractmethod
     def get_implicit_dependencies_ports(self, ports, level):
         """
-        :param list[lib.enarksh_lib.xml_generator.port.Port.Port] ports:
+        :param list[enarksh_lib.xml_generator.port.Port.Port] ports:
         :param int                                                level:
         """
         raise NotImplementedError()
@@ -121,7 +127,7 @@ class Port:
         """
         Returns the node of this port.
 
-        :rtype: lib.enarksh_lib.xml_generator.node.Node.Node
+        :rtype: enarksh_lib.xml_generator.node.Node.Node
         """
         return self._node
 
@@ -191,7 +197,7 @@ class Port:
     def generate_xml_dependant(self, xml_tree, parent_node):
         """
         :param xml_tree:
-        :param lib.enarksh_lib.xml_generator.node.Node.Node parent_node:
+        :param enarksh_lib.xml_generator.node.Node.Node parent_node:
         """
         node_name = SubElement(xml_tree, 'NodeName')
         node_name.text = self.NODE_SELF_NAME if self._node == parent_node else self._node.get_name()

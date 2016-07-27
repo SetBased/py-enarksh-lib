@@ -1,9 +1,15 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 from xml.etree.ElementTree import SubElement
 
-from lib.enarksh_lib.xml_generator.resource.Resource import Resource
+from enarksh_lib.xml_generator.resource.Resource import Resource
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class CountingResource(Resource):
     """
     Class for generating XML messages for elements of type 'CountingResourceType'.

@@ -1,9 +1,15 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 from xml.etree.ElementTree import SubElement
 
-from lib.enarksh_lib.xml_generator.node.Node import Node
+from enarksh_lib.xml_generator.node.Node import Node
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class CommandJobNode(Node):
     """
     Class for generating XML messages for elements of type 'CommandJobType'.
@@ -51,7 +57,7 @@ class CommandJobNode(Node):
         """
 
         :param str                                                port_name:
-        :param list[lib.enarksh_lib.xml_generator.port.Port.Port] ports:
+        :param list[enarksh_lib.xml_generator.port.Port.Port] ports:
         :param int                                                level:
 
         :rtype: list[]

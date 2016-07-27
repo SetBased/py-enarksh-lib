@@ -1,9 +1,15 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 from xml.etree.ElementTree import SubElement
 
-from lib.enarksh_lib.xml_generator.node.Node import Node
+from enarksh_lib.xml_generator.node.Node import Node
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class CompoundJobNode(Node):
     """
     Class for generating XML messages for elements of type 'CompoundJobType'.
@@ -17,6 +23,5 @@ class CompoundJobNode(Node):
         compound_job = SubElement(xml_tree, 'CompoundJob')
 
         super().generate_xml(compound_job)
-
 
 # ----------------------------------------------------------------------------------------------------------------------

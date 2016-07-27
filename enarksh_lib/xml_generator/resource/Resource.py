@@ -1,8 +1,14 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 import abc
 from xml.etree.ElementTree import SubElement
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class Resource:
     """
     Class for generating XML messages for elements of type 'ResourceType'.

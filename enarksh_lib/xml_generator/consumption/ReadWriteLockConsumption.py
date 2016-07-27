@@ -1,12 +1,17 @@
+"""
+Enarksh
+
+Copyright 2015-2016 Set Based IT Consultancy
+
+Licence MIT
+"""
 from xml.etree.ElementTree import SubElement
 
-from lib.enarksh_lib.xml_generator.consumption.Consumption import Consumption
+from enarksh_lib.xml_generator.consumption.Consumption import Consumption
 
 
-# ----------------------------------------------------------------------------------------------------------------------
 class ReadWriteLockConsumption(Consumption):
     """
-    Class ReadWriteLockConsumption
     Class for generating XML messages for elements of type 'ReadWriteLockConsumptionType'.
     """
 
