@@ -34,7 +34,7 @@ class ReadWriteLockConsumption(Consumption):
         """
         :param xml_tree:
         """
-        super().generate_xml(xml_tree)
+        Consumption.generate_xml(self, xml_tree)
 
         mode = SubElement(xml_tree, 'Mode')
         mode.text = self._mode

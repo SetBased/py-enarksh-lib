@@ -34,7 +34,7 @@ class CountingResource(Resource):
         """
         :param xml_tree:
         """
-        super().generate_xml(xml_tree)
+        Resource.generate_xml(self, xml_tree)
 
         amount = SubElement(xml_tree, 'Amount')
         amount.text = str(self._amount)
