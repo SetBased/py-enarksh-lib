@@ -37,7 +37,7 @@ class Port:
         """
         The name of this port.
 
-        :type: enarksh_lib.xml_generator.port.Port.Port
+        :type: str
         """
 
         self._predecessors = []

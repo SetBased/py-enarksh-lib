@@ -16,6 +16,7 @@ class Node:
     Class for generating XML messages for elements of type 'NodeType'.
     """
 
+    # ------------------------------------------------------------------------------------------------------------------
     ALL_PORT_NAME = 'all'
     """
     Token for 'all' input or output ports on a node.
@@ -48,28 +49,28 @@ class Node:
         """
         The child nodes of this node.
 
-        :type: list[]
+        :type: list[enarksh_lib.xml_generator.node.Node.Node]
         """
 
         self._consumptions = []
         """
         The consumptions.
 
-        :type: list[]
+        :type: list[enarksh_lib.xml_generator.consumption.Consumption.Consumption]
         """
 
         self._input_ports = []
         """
         The input ports of this node.
 
-        :type: list[]
+        :type: list[enarksh_lib.xml_generator.port.InputPort.InputPort]
         """
 
         self._output_ports = []
         """
         The output ports of this node.
 
-        :type: list[]
+        :type: list[enarksh_lib.xml_generator.port.OutputPort.OutputPort]
         """
 
         self._parent = None
@@ -83,7 +84,7 @@ class Node:
         """
         The resources of this node.
 
-        :type: list[]
+        :type: list[enarksh_lib.xml_generator.resource.Resource.Resource]
         """
 
         self._username = None
@@ -98,10 +99,10 @@ class Node:
         """
         Adds a node as a child node of this node.
 
-        :param Node child_node:
+        :param enarksh_lib.xml_generator.node.Node.Node child_node: The new child node.
         """
         # -- @todo Test node exists.
-        # -- @todo Test node is it zelf.
+        # -- @todo Test node is not self.
         # -- @todo Test parent node is not set.
 
         self._child_nodes.append(child_node)
@@ -112,7 +113,7 @@ class Node:
         """
         Adds a consumption as a consumption of this node.
 
-        :param enarksh_lib.xml_generator.node.consumption.Consumption.Consumption consumption:
+        :param enarksh_lib.xml_generator.node.consumption.Consumption.Consumption consumption: The consumption.
         """
         # -- @todo test consumption exists.
 
@@ -172,7 +173,7 @@ class Node:
         """
         Adds resource 'resource' as a resource of this node.
 
-        :param enarksh_lib.xml_generator.resource.Resource.Resource resource:
+        :param enarksh_lib.xml_generator.resource.Resource.Resource resource: The resource.
         """
         # -- @todo Test resource exists.
 
@@ -246,15 +247,15 @@ class Node:
     # ------------------------------------------------------------------------------------------------------------------
     def get_child_node(self, name):
         """
-        Returns child node with 'name'. If no child node with 'name' exists an exception is thrown.
+        Returns a child node by name. If no child node such name exists an exception is thrown.
 
-        :param string name:
+        :param str name: The name of the child node.
 
         :rtype: None|enarksh_lib.xml_generator.node.Node.Node
         """
         ret = self.search_child_node(name)
         if not ret:
-            raise Exception("Child node with name '{0}' doesn't exists".format(name))
+            raise ValueError("Child node with name '{0}' doesn't exists".format(name))
 
         return ret
 
@@ -301,7 +302,7 @@ class Node:
             if name == self.ALL_PORT_NAME:
                 ret = self.make_input_port(name)
             else:
-                raise Exception("Node '{0}' doesn't have input port '{0}'".format(self._name, name))
+                raise Exception("Node '{0}' doesn't have input port '{1}'".format(self._name, name))
 
         return ret
 
@@ -347,7 +348,7 @@ class Node:
         """
         Returns all output ports of this node.
 
-        :rtype: list[enarksh_lib.xml_generator.port.OutputPort.OutputPort
+        :rtype: list[enarksh_lib.xml_generator.port.OutputPort.OutputPort]
         """
         return self._output_ports
 
@@ -368,8 +369,8 @@ class Node:
         :rtype: str
         """
         # -- @todo detect recursion
-
         path = self._parent.get_path() if self._parent else "/"
+
         return path + self._name
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -418,6 +419,7 @@ class Node:
         """
         This function can be called before generation XML and is intended to be overloaded.
         """
+        # Nothing to do.
         pass
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -438,7 +440,7 @@ class Node:
     def remove_child_node(self, node_name):
         """
         Removes node 'node_name' as a child node. The dependencies of any successor of 'node' are been replaced
-        with all dependencies of node.
+        with all dependencies of the removed node.
 
         :param str node_name:
         """
@@ -543,27 +545,38 @@ class Node:
     # ------------------------------------------------------------------------------------------------------------------
     def set_username(self, username):
         """
-        Sets the name under which this node or its child nodes must run.
+        Sets the name the account under which this node or its child nodes must run.
 
-        :param str username:
+        :param str username: The name of the account.
         """
         # -- @todo Test username not empty of None.
-
         self._username = username
 
     # ------------------------------------------------------------------------------------------------------------------
     def ensure_dependencies(self):
-        if self._child_nodes:
-            input_port_all = self.get_input_port(self.ALL_PORT_NAME)
-            # $output_port_all = $this->getOutputPort( self::ALL_PORT_NAME );
+        """
+        Creates the following dependencies:
+        - Dependencies between the input port 'all' and the input port 'all' of all the child nodes of this nodes.
+        - Dependencies between all output ports 'all' of all child nodes and the output port 'all' of this node.
+        - Dependencies between the input port 'all' of this node and the output ports 'all' of all predecessor nodes of
+          this node.
+        This is done recursively for all child node.
 
+        Remember: Redundant and duplicate dependencies are removed by purge().
+        """
+        if self._child_nodes:
+            # Apply this method recursively for all child node.
             for node in self._child_nodes:
                 node.ensure_dependencies()
 
-            # Ensure that output port 'all' depends on all child nodes.
+            # Ensure that the input port 'all' of all child nodes depends on input port 'all' of this node.
+            self.add_dependency_all_input_ports()
+
+            # Ensure that output port 'all' of the node depends on all output ports 'all' of all child nodes.
             self.add_dependency_all_output_ports()
 
             # Ensure input port 'all' of this node depends on output 'all' of each predecessor of this node.
+            input_port_all = self.get_input_port(self.ALL_PORT_NAME)
             for input_port in self._input_ports:
                 for port in input_port.get_all_dependencies():
                     if port.get_node() != self._parent:
