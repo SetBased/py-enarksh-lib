@@ -1,0 +1,3 @@
+before_commands:
+    - sudo pip3 install cleo
+    - sudo pip3 install pystratum
