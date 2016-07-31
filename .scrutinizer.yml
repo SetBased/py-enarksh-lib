@@ -1,3 +1,9 @@
-before_commands:
-    - sudo pip3 install cleo
-    - sudo pip3 install pystratum
+build:
+    tests:
+        override:
+            -
+                coverage:
+                    file: '.coverage'
+                    config_file: '.coveragerc'
+                    format: 'py-cc'
+
