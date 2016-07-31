@@ -91,7 +91,7 @@ class Port:
                     node_name.text = predecessor.node.name
 
                 port_name = SubElement(dependency, 'PortName')
-                port_name.text = self.port_name
+                port_name.text = predecessor.port_name
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_dependencies_ports(self, ports, level):
