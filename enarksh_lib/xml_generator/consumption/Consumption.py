@@ -19,7 +19,6 @@ class Consumption:
         """
         Object constructor.
         """
-
         self.name = name
         """
         The name of this consumption.

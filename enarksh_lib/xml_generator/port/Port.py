@@ -40,14 +40,14 @@ class Port:
         :type: str
         """
 
-        self._predecessors = []
+        self.predecessors = []
         """
         The dependencies of this port.
 
         :type: list[enarksh_lib.xml_generator.port.Port.Port]
         """
 
-        self._successors = []
+        self.successors = []
         """
         The dependants of this port.
 
@@ -63,8 +63,8 @@ class Port:
         """
         # -- @todo Validate owner of port and owner of this port.
 
-        if port not in self._predecessors:
-            self._predecessors.append(port)
+        if port not in self.predecessors:
+            self.predecessors.append(port)
 
     # ------------------------------------------------------------------------------------------------------------------
     def generate_xml(self, parent):
@@ -78,10 +78,10 @@ class Port:
         port_name = SubElement(port, 'PortName')
         port_name.text = self.port_name
 
-        if self._predecessors:
+        if self.predecessors:
             dependencies_element = SubElement(port, 'Dependencies')
 
-            for predecessor in self._predecessors:
+            for predecessor in self.predecessors:
                 dependency = SubElement(dependencies_element, 'Dependency')
 
                 node_name = SubElement(dependency, 'NodeName')
@@ -94,15 +94,6 @@ class Port:
                 port_name.text = self.port_name
 
     # ------------------------------------------------------------------------------------------------------------------
-    def get_all_dependencies(self):
-        """
-        Returns all the dependencies of this port.
-
-        :rtype: enarksh_lib.xml_generator.port.Port.Port port:
-        """
-        return self._predecessors
-
-    # ------------------------------------------------------------------------------------------------------------------
     def get_dependencies_ports(self, ports, level):
         """
 
@@ -111,7 +102,7 @@ class Port:
 
         :rtype: list[]
         """
-        for port in self._predecessors:
+        for port in self.predecessors:
             if port not in ports:
                 if level:
                     ports.append(port)
@@ -133,19 +124,19 @@ class Port:
         """
         # Get all implicit dependencies ports.
         implicit_dependencies = []
-        for port in self._predecessors:
+        for port in self.predecessors:
             port.get_implicit_dependencies_ports(implicit_dependencies, 0)
 
         # Create a new dependency array without implicit dependencies.
         direct_dependencies = []
-        for port in self._predecessors:
+        for port in self.predecessors:
             if port not in implicit_dependencies:
 
                 # Prevent duplicate dependencies.
                 if port not in direct_dependencies:
                     direct_dependencies.append(port)
 
-        self._predecessors = direct_dependencies
+        self.predecessors = direct_dependencies
 
     # ------------------------------------------------------------------------------------------------------------------
     def replace_node_dependency(self, node_name, dependencies):
@@ -158,17 +149,17 @@ class Port:
         obsolete = []
 
         # Find any predecessor that depends on node 'node_name'.
-        for index, port in enumerate(self._predecessors):
+        for index, port in enumerate(self.predecessors):
             if port.node.name == node_name:
                 obsolete.append(index)
 
         if obsolete:
             # Remove all dependencies of node 'node_name'.
             for index in obsolete:
-                self._predecessors.pop(index)
+                self.predecessors.pop(index)
 
             # And replace those dependencies with 'dependencies'.
             for dep in dependencies:
-                self._predecessors.append(dep)
+                self.predecessors.append(dep)
 
 # ----------------------------------------------------------------------------------------------------------------------

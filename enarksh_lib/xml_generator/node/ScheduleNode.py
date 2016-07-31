@@ -44,10 +44,9 @@ class ScheduleNode(CompoundJobNode):
         Remember a schedule node is the only compound node without input and output ports. Therefore we must override
         this method.
         """
-        if self.child_nodes:
-            # Apply this method recursively for all child node.
-            for node in self.child_nodes:
-                node.ensure_dependencies()
+        # Apply this method recursively for all child node.
+        for node in self.child_nodes:
+            node.ensure_dependencies()
 
     # ------------------------------------------------------------------------------------------------------------------
     def generate_xml(self, parent):
