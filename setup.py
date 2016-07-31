@@ -11,7 +11,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 setup(
     name='Enarksh-Lib',
 
-    version='0.0.2',
+    version='0.0.3',
 
     description='Enarksh-Lib',
     long_description=long_description,
