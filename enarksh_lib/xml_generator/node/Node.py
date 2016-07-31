@@ -407,7 +407,7 @@ class Node:
         # Get all dependencies of the node.
         deps = []
         for port in node.input_ports:
-            for dep in port.get_all_dependencies():
+            for dep in port.predecessors:
                 deps.append(dep)
 
         for tmp in self.child_nodes:
@@ -507,7 +507,7 @@ class Node:
             # Ensure input port 'all' of this node depends on output 'all' of each predecessor of this node.
             input_port_all = self.get_input_port(self.ALL_PORT_NAME)
             for input_port in self.input_ports:
-                for port in input_port.get_all_dependencies():
+                for port in input_port.predecessors:
                     if port.node != self.parent:
                         input_port_all.add_dependency(port.node.get_output_port(self.ALL_PORT_NAME))
 
