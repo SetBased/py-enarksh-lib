@@ -46,56 +46,56 @@ class Node:
 
         :param str name: The name of the node.
         """
-        self._name = name
+        self.name = name
         """
         The name of the node.
 
         :type: str
         """
 
-        self._child_nodes = []
+        self.child_nodes = []
         """
         The child nodes of this node.
 
         :type: list[enarksh_lib.xml_generator.node.Node.Node]
         """
 
-        self._consumptions = []
+        self.consumptions = []
         """
         The consumptions.
 
         :type: list[enarksh_lib.xml_generator.consumption.Consumption.Consumption]
         """
 
-        self._input_ports = []
+        self.input_ports = []
         """
         The input ports of this node.
 
         :type: list[enarksh_lib.xml_generator.port.InputPort.InputPort]
         """
 
-        self._output_ports = []
+        self.output_ports = []
         """
         The output ports of this node.
 
         :type: list[enarksh_lib.xml_generator.port.OutputPort.OutputPort]
         """
 
-        self._parent = None
+        self.parent = None
         """
         The parent node of this node.
 
         :type: enarksh_lib.xml_generator.node.Node.Node
         """
 
-        self._resources = []
+        self.resources = []
         """
         The resources of this node.
 
         :type: list[enarksh_lib.xml_generator.resource.Resource.Resource]
         """
 
-        self._username = None
+        self.username = ''
         """
         The user under which this node or its child nodes must run.
 
@@ -113,19 +113,8 @@ class Node:
         # -- @todo Test node is not self.
         # -- @todo Test parent node is not set.
 
-        self._child_nodes.append(child_node)
-        child_node._parent = self
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def add_consumption(self, consumption):
-        """
-        Adds a consumption as a consumption of this node.
-
-        :param enarksh_lib.xml_generator.node.consumption.Consumption.Consumption consumption: The consumption.
-        """
-        # -- @todo test consumption exists.
-
-        self._consumptions.append(consumption)
+        self.child_nodes.append(child_node)
+        child_node.parent = self
 
     # ------------------------------------------------------------------------------------------------------------------
     def add_dependency(self, successor_node_name, successor_port_name, predecessor_node_name, predecessor_port_name):
@@ -163,7 +152,7 @@ class Node:
         """
         parent_port = self.get_input_port(self.ALL_PORT_NAME)
 
-        for node in self._child_nodes:
+        for node in self.child_nodes:
             child_port = node.get_input_port(self.ALL_PORT_NAME)
             child_port.add_dependency(parent_port)
 
@@ -174,20 +163,9 @@ class Node:
         """
         parent_port = self.get_output_port(self.ALL_PORT_NAME)
 
-        for node in self._child_nodes:
+        for node in self.child_nodes:
             child_port = node.get_output_port(self.ALL_PORT_NAME)
             parent_port.add_dependency(child_port)
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def add_resource(self, resource):
-        """
-        Adds resource 'resource' as a resource of this node.
-
-        :param enarksh_lib.xml_generator.resource.Resource.Resource resource: The resource.
-        """
-        # -- @todo Test resource exists.
-
-        self._resources.append(resource)
 
     # ------------------------------------------------------------------------------------------------------------------
     def finalize(self):
@@ -219,42 +197,42 @@ class Node:
         """
         # Generate XML for the node name.
         node_name = SubElement(parent, 'NodeName')
-        node_name.text = self._name
+        node_name.text = self.name
 
         # Generate XML for username.
-        if self._username:
+        if self.username:
             username = SubElement(parent, 'UserName')
-            username.text = self._username
+            username.text = self.username
 
         # Generate XML for input ports.
-        if self._input_ports:
+        if self.input_ports:
             input_ports = SubElement(parent, 'InputPorts')
-            for port in self._input_ports:
+            for port in self.input_ports:
                 port.generate_xml(input_ports)
 
         # Generate XML for resources.
-        if self._resources:
+        if self.resources:
             resources = SubElement(parent, 'Resources')
-            for resource in self._resources:
+            for resource in self.resources:
                 resource.generate_xml(resources)
 
         # Generate XML for consumptions.
-        if self._consumptions:
+        if self.consumptions:
             consumptions = SubElement(parent, 'Consumptions')
-            for consumption in self._consumptions:
+            for consumption in self.consumptions:
                 consumption.generate_xml(consumptions)
 
         # Generate XML for nodes.
-        if self._child_nodes:
+        if self.child_nodes:
             child_nodes = SubElement(parent, 'Nodes')
-            for node in self._child_nodes:
+            for node in self.child_nodes:
                 node.pre_generate_xml()
                 node.generate_xml(child_nodes)
 
         # Generate XML for output ports.
-        if self._output_ports:
+        if self.output_ports:
             output_ports = SubElement(parent, 'OutputPorts')
-            for port in self._output_ports:
+            for port in self.output_ports:
                 port.generate_xml(output_ports)
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -315,27 +293,9 @@ class Node:
             if name == self.ALL_PORT_NAME:
                 ret = self.make_input_port(name)
             else:
-                raise Exception("Node '{0}' doesn't have input port '{1}'".format(self._name, name))
+                raise Exception("Node '{0}' doesn't have input port '{1}'".format(self.name, name))
 
         return ret
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_input_ports(self):
-        """
-        Returns all input ports of this node.
-
-        :rtype: list[enarksh_lib.xml_generator.port.InputPort.InputPort]
-        """
-        return self._input_ports
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_name(self):
-        """
-        Returns the name of this node.
-
-        :rtype: str
-        """
-        return self._name
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_output_port(self, name):
@@ -352,27 +312,9 @@ class Node:
             if name == self.ALL_PORT_NAME:
                 ret = self.make_output_port(name)
             else:
-                raise Exception("Node '{0}' doesn't have output port '{1}'".format(self._name, name))
+                raise Exception("Node '{0}' doesn't have output port '{1}'".format(self.name, name))
 
         return ret
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_output_ports(self):
-        """
-        Returns all output ports of this node.
-
-        :rtype: list[enarksh_lib.xml_generator.port.OutputPort.OutputPort]
-        """
-        return self._output_ports
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_parent(self):
-        """
-        Returns the parent node of this node.
-
-        :rtype: enarksh_lib.xml_generator.node.Node.Node
-        """
-        return self._parent
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_path(self):
@@ -382,18 +324,9 @@ class Node:
         :rtype: str
         """
         # -- @todo detect recursion
-        path = self._parent.get_path() if self._parent else "/"
+        path = self.parent.get_path() if self.parent else "/"
 
-        return path + self._name
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_username(self):
-        """
-        Returns the username under which this node or its child nodes must run.
-
-        :rtype: str
-        """
-        return self._username
+        return path + self.name
 
     # ------------------------------------------------------------------------------------------------------------------
     def make_input_port(self, name):
@@ -407,7 +340,7 @@ class Node:
         # -- @todo test port already exists.
 
         port = InputPort(self, name)
-        self._input_ports.append(port)
+        self.input_ports.append(port)
 
         return port
 
@@ -423,7 +356,7 @@ class Node:
         # -- @todo test port already exists.
 
         port = OutputPort(self, name)
-        self._output_ports.append(port)
+        self.output_ports.append(port)
 
         return port
 
@@ -442,13 +375,13 @@ class Node:
         """
         Removes duplicate dependencies and dependencies that are dependencies of predecessors.
         """
-        for port in self._input_ports:
+        for port in self.input_ports:
             port.purge()
 
-        for node in self._child_nodes:
+        for node in self.child_nodes:
             node.purge()
 
-        for port in self._output_ports:
+        for port in self.output_ports:
             port.purge()
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -462,10 +395,10 @@ class Node:
         node = None
 
         # Find and remove node 'node_name'.
-        for tmp in self._child_nodes:
-            if tmp.get_name() == node_name:
+        for tmp in self.child_nodes:
+            if tmp.name == node_name:
                 node = tmp
-                self._child_nodes.remove(tmp)
+                self.child_nodes.remove(tmp)
                 break
 
         if not node:
@@ -473,14 +406,14 @@ class Node:
 
         # Get all dependencies of the node.
         deps = []
-        for port in node.get_input_ports():
+        for port in node.input_ports:
             for dep in port.get_all_dependencies():
                 deps.append(dep)
 
-        for tmp in self._child_nodes:
+        for tmp in self.child_nodes:
             tmp.replace_node_dependency(node_name, deps)
 
-        for port in self._output_ports:
+        for port in self.output_ports:
             port.replace_node_dependency(node_name, deps)
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -491,7 +424,7 @@ class Node:
         :param str    node_name:
         :param list[] dependencies:
         """
-        for port in self._input_ports:
+        for port in self.input_ports:
             port.replace_node_dependency(node_name, dependencies)
 
     # ------------------------------------------------------------------------------------------------------------------
@@ -505,8 +438,8 @@ class Node:
         :rtype: None|enarksh_lib.xml_generator.node.Node.Node
         """
         ret = None
-        for node in self._child_nodes:
-            if node.get_name() == name:
+        for node in self.child_nodes:
+            if node.name == name:
                 ret = node
                 break
 
@@ -523,8 +456,8 @@ class Node:
         :rtype: None|enarksh_lib.xml_generator.port.InputPort.InputPort
         """
         ret = None
-        for port in self._input_ports:
-            if port.get_name() == name:
+        for port in self.input_ports:
+            if port.port_name == name:
                 ret = port
                 break
 
@@ -541,31 +474,12 @@ class Node:
         :rtype: None|enarksh_lib.xml_generator.port.InputPort.InputPort
         """
         ret = None
-        for port in self._output_ports:
-            if port.get_name() == name:
+        for port in self.output_ports:
+            if port.port_name == name:
                 ret = port
                 break
 
         return ret
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def set_name(self, name):
-        """
-        Sets the name of this node to 'name'.
-
-        :param str name:
-        """
-        self._name = name
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def set_username(self, username):
-        """
-        Sets the name the account under which this node or its child nodes must run.
-
-        :param str username: The name of the account.
-        """
-        # -- @todo Test username not empty of None.
-        self._username = username
 
     # ------------------------------------------------------------------------------------------------------------------
     def ensure_dependencies(self):
@@ -579,9 +493,9 @@ class Node:
 
         Remember: Redundant and duplicate dependencies are removed by purge().
         """
-        if self._child_nodes:
+        if self.child_nodes:
             # Apply this method recursively for all child node.
-            for node in self._child_nodes:
+            for node in self.child_nodes:
                 node.ensure_dependencies()
 
             # Ensure that the input port 'all' of all child nodes depends on input port 'all' of this node.
@@ -592,9 +506,9 @@ class Node:
 
             # Ensure input port 'all' of this node depends on output 'all' of each predecessor of this node.
             input_port_all = self.get_input_port(self.ALL_PORT_NAME)
-            for input_port in self._input_ports:
+            for input_port in self.input_ports:
                 for port in input_port.get_all_dependencies():
-                    if port.get_node() != self._parent:
-                        input_port_all.add_dependency(port.get_node().get_output_port(self.ALL_PORT_NAME))
+                    if port.node != self.parent:
+                        input_port_all.add_dependency(port.node.get_output_port(self.ALL_PORT_NAME))
 
 # ----------------------------------------------------------------------------------------------------------------------

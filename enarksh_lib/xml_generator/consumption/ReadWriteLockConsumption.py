@@ -25,7 +25,7 @@ class ReadWriteLockConsumption(Consumption):
         """
         Consumption.__init__(self, name)
 
-        self._mode = mode
+        self.mode = mode
         """
         The mode of the lock of this consumption.
 
@@ -44,6 +44,6 @@ class ReadWriteLockConsumption(Consumption):
         self.generate_xml_common(consumption)
 
         mode = SubElement(consumption, 'Mode')
-        mode.text = self._mode
+        mode.text = self.mode
 
 # ----------------------------------------------------------------------------------------------------------------------

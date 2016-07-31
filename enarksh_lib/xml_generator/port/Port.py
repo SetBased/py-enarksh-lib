@@ -26,14 +26,14 @@ class Port:
         Object constructor.
         """
 
-        self._node = node
+        self.node = node
         """
         The node of which this port is a port.
 
         :type: enarksh_lib.xml_generator.node.Node.Node
         """
 
-        self._port_name = port_name
+        self.port_name = port_name
         """
         The name of this port.
 
@@ -76,7 +76,7 @@ class Port:
         port = SubElement(parent, 'Port')
 
         port_name = SubElement(port, 'PortName')
-        port_name.text = self._port_name
+        port_name.text = self.port_name
 
         if self._predecessors:
             dependencies_element = SubElement(port, 'Dependencies')
@@ -85,11 +85,13 @@ class Port:
                 dependency = SubElement(dependencies_element, 'Dependency')
 
                 node_name = SubElement(dependency, 'NodeName')
-                node_name.text = self.NODE_SELF_NAME if predecessor._node == self._node.get_parent() \
-                    else self._node.get_name()
+                if predecessor.node == self.node.parent:
+                    node_name.text = self.NODE_SELF_NAME
+                else:
+                    node_name.text = predecessor.node.name
 
                 port_name = SubElement(dependency, 'PortName')
-                port_name.text = self._port_name
+                port_name.text = self.port_name
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_all_dependencies(self):
@@ -125,33 +127,6 @@ class Port:
         raise NotImplementedError()
 
     # ------------------------------------------------------------------------------------------------------------------
-    def get_name(self):
-        """
-        Returns the name of this port.
-
-        :rtype: str
-        """
-        return self._port_name
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_node(self):
-        """
-        Returns the node of this port.
-
-        :rtype: enarksh_lib.xml_generator.node.Node.Node
-        """
-        return self._node
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_node_name(self):
-        """
-        Returns the name of the node to which this port belongs.
-
-        :rtype: str
-        """
-        self._node.get_name()
-
-    # ------------------------------------------------------------------------------------------------------------------
     def purge(self):
         """
         Removes dependencies from this port that are implicit dependencies (via one or more predecessors).
@@ -184,7 +159,7 @@ class Port:
 
         # Find any predecessor that depends on node 'node_name'.
         for index, port in enumerate(self._predecessors):
-            if port.get_node_name() == node_name:
+            if port.node.name == node_name:
                 obsolete.append(index)
 
         if obsolete:

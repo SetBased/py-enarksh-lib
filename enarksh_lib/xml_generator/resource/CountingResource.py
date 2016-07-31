@@ -25,7 +25,7 @@ class CountingResource(Resource):
         """
         Resource.__init__(self, name)
 
-        self._amount = amount
+        self.amount = amount
         """
         The amount of this resource.
 
@@ -44,6 +44,6 @@ class CountingResource(Resource):
         self._generate_xml_common(resource)
 
         amount = SubElement(resource, 'Amount')
-        amount.text = str(self._amount)
+        amount.text = str(self.amount)
 
 # ----------------------------------------------------------------------------------------------------------------------

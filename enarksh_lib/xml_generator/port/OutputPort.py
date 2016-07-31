@@ -21,6 +21,6 @@ class OutputPort(Port):
 
         :rtype: list[]
         """
-        return self._node.get_implicit_dependencies_output_ports(self._port_name, ports, level)
+        return self.node.get_implicit_dependencies_output_ports(self.port_name, ports, level)
 
 # ----------------------------------------------------------------------------------------------------------------------

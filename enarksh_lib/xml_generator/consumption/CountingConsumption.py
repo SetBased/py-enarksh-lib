@@ -22,7 +22,7 @@ class CountingConsumption(Consumption):
         """
         Consumption.__init__(self, name)
 
-        self._amount = amount
+        self.amount = amount
         """
         The amount consumed by this consumption
 
@@ -41,6 +41,6 @@ class CountingConsumption(Consumption):
         self.generate_xml_common(consumption)
 
         amount = SubElement(consumption, 'Amount')
-        amount.text = str(self._amount)
+        amount.text = str(self.amount)
 
 # ----------------------------------------------------------------------------------------------------------------------

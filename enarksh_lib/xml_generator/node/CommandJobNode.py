@@ -77,22 +77,4 @@ class CommandJobNode(Node):
 
         self.get_implicit_dependencies_input_ports(self.ALL_PORT_NAME, ports, level + 1)
 
-    # ------------------------------------------------------------------------------------------------------------------
-    def append_argument(self, argument):
-        """
-        Appends an argument to the list of arguments of the command.
-
-        :param str argument: The argument.
-        """
-        self.args.append(argument)
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def set_path(self, path):
-        """
-        Set the path to the executable that must be run by this job.
-
-        :param str path: The path to the executable that must be run by this job
-        """
-        self.path = path
-
 # ----------------------------------------------------------------------------------------------------------------------

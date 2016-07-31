@@ -17,8 +17,8 @@ class InputPort(Port):
     def get_implicit_dependencies_ports(self, ports, level):
         """
         :param list[enarksh_lib.xml_generator.port.Port.Port] ports:
-        :param int                                                level:
+        :param int                                            level:
         """
-        self._node.get_implicit_dependencies_input_ports(self._port_name, ports, level)
+        self.node.get_implicit_dependencies_input_ports(self.port_name, ports, level)
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ class Resource:
 
         :param str name: The name of this resource.
         """
-        self._name = name
+        self.name = name
         """
         The name of this resource.
 
@@ -48,6 +48,6 @@ class Resource:
         :param xml.etree.ElementTree.Element parent: The parent XML element (i.e. the resource XML element).
         """
         resource_name = SubElement(parent, 'ResourceName')
-        resource_name.text = self._name
+        resource_name.text = self.name
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -20,7 +20,7 @@ class Consumption:
         Object constructor.
         """
 
-        self._name = name
+        self.name = name
         """
         The name of this consumption.
 
@@ -47,6 +47,6 @@ class Consumption:
         :param xml.etree.ElementTree.Element parent: The parent XML element (i.e. the consumption XML element).
         """
         resource_name = SubElement(parent, 'ResourceName')
-        resource_name.text = self._name
+        resource_name.text = self.name
 
 # ----------------------------------------------------------------------------------------------------------------------
