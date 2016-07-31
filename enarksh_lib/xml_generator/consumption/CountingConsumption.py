@@ -30,20 +30,17 @@ class CountingConsumption(Consumption):
         """
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    def generate_xml(self, parent):
         """
-        :param xml_tree:
-        """
-        Consumption.generate_xml(self, xml_tree)
+        Generates the XML element for this consumption.
 
-        amount = SubElement(xml_tree, 'Amount')
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+        """
+        consumption = SubElement(parent, 'CountingConsumption')
+
+        self.generate_xml_common(consumption)
+
+        amount = SubElement(consumption, 'Amount')
         amount.text = str(self._amount)
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_consumption_type_tag(self):
-        """
-        :rtype: str
-        """
-        return 'CountingConsumption'
 
 # ----------------------------------------------------------------------------------------------------------------------

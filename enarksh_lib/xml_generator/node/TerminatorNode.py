@@ -18,12 +18,14 @@ class TerminatorNode(Node):
     # -- @todo validate node has only one input port and no output ports.
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    def generate_xml(self, parent):
         """
-        :param xml_tree:
-        """
-        terminator = SubElement(xml_tree, 'Terminator')
+        Generates the XML element for this node.
 
-        Node.generate_xml(self, terminator)
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+        """
+        terminator = SubElement(parent, 'Terminator')
+
+        self._generate_xml_common(terminator)
 
 # ----------------------------------------------------------------------------------------------------------------------

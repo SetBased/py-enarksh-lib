@@ -18,12 +18,14 @@ class ManualTriggerNode(Node):
     # -- @todo validate node has no input ports and only one output port.
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    def generate_xml(self, parent):
         """
-        :param xml_tree:
-        """
-        manual_trigger = SubElement(xml_tree, 'ManualTrigger')
+        Generates the XML element for this node.
 
-        Node.generate_xml(self, manual_trigger)
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+        """
+        manual_trigger = SubElement(parent, 'ManualTrigger')
+
+        self._generate_xml_common(manual_trigger)
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -5,6 +5,7 @@ Copyright 2015-2016 Set Based IT Consultancy
 
 Licence MIT
 """
+import abc
 from xml.etree.ElementTree import SubElement
 
 from enarksh_lib.xml_generator.port.InputPort import InputPort
@@ -20,24 +21,31 @@ class Node:
     ALL_PORT_NAME = 'all'
     """
     Token for 'all' input or output ports on a node.
+
+    :type: str
     """
 
     NODE_SELF_NAME = '.'
     """
     Token for node self.
+
+    :type: str
     """
 
     NODE_ALL_NAME = '*'
     """
     Token for all child nodes.
+
+    :type: str
     """
 
     # ------------------------------------------------------------------------------------------------------------------
     def __init__(self, name):
         """
         Object constructor.
-        """
 
+        :param str name: The name of the node.
+        """
         self._name = name
         """
         The name of the node.
@@ -122,10 +130,12 @@ class Node:
     # ------------------------------------------------------------------------------------------------------------------
     def add_dependency(self, successor_node_name, successor_port_name, predecessor_node_name, predecessor_port_name):
         """
-        :param str successor_node_name:
-        :param str successor_port_name:
-        :param str predecessor_node_name:
-        :param str predecessor_port_name:
+        Adds a dependency between two child nodes are this node and a child node.
+
+        :param str successor_node_name: The successor node (use NODE_SELF_NAME for the this node).
+        :param str successor_port_name: The successor port.
+        :param str predecessor_node_name: The predecessor node (use NODE_SELF_NAME for the this node).
+        :param str predecessor_port_name: The predecessor port.
         """
         if not predecessor_port_name:
             predecessor_port_name = self.ALL_PORT_NAME
@@ -189,60 +199,63 @@ class Node:
         self.purge()
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    @abc.abstractmethod
+    def generate_xml(self, parent):
         """
-        Generates XML-code for this node.
+        Generates the XML element for this node.
 
-        :param xml_tree:
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+
+        :rtype: None
+        """
+        raise NotImplementedError()
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def _generate_xml_common(self, parent):
+        """
+        Generates the common XML elements of the XML element for this  node.
+
+        :param xml.etree.ElementTree.Element parent: The parent XML element (i.e. the node XML element).
         """
         # Generate XML for the node name.
-        node_name = SubElement(xml_tree, 'NodeName')
+        node_name = SubElement(parent, 'NodeName')
         node_name.text = self._name
 
         # Generate XML for username.
         if self._username:
-            username = SubElement(xml_tree, 'UserName')
+            username = SubElement(parent, 'UserName')
             username.text = self._username
 
         # Generate XML for input ports.
         if self._input_ports:
-            input_ports = SubElement(xml_tree, 'InputPorts')
-
+            input_ports = SubElement(parent, 'InputPorts')
             for port in self._input_ports:
-                port_tree_element = SubElement(input_ports, 'Port')
-                port.generate_xml(port_tree_element)
+                port.generate_xml(input_ports)
 
         # Generate XML for resources.
         if self._resources:
-            resources = SubElement(xml_tree, 'Resources')
-
+            resources = SubElement(parent, 'Resources')
             for resource in self._resources:
-                res = SubElement(resources, resource.get_resource_type_tag())
-                resource.generate_xml(res)
+                resource.generate_xml(resources)
 
         # Generate XML for consumptions.
         if self._consumptions:
-            consumptions = SubElement(xml_tree, 'Consumptions')
-
+            consumptions = SubElement(parent, 'Consumptions')
             for consumption in self._consumptions:
-                cons = SubElement(consumptions, consumption.get_consumption_type_tag())
-                consumption.generate_xml(cons)
+                consumption.generate_xml(consumptions)
 
         # Generate XML for nodes.
         if self._child_nodes:
-            child_nodes = SubElement(xml_tree, 'Nodes')
-
+            child_nodes = SubElement(parent, 'Nodes')
             for node in self._child_nodes:
                 node.pre_generate_xml()
                 node.generate_xml(child_nodes)
 
         # Generate XML for output ports.
         if self._output_ports:
-            output_ports = SubElement(xml_tree, 'OutputPorts')
-
+            output_ports = SubElement(parent, 'OutputPorts')
             for port in self._output_ports:
-                port_element = SubElement(output_ports, 'Port')
-                port.generate_xml(port_element)
+                port.generate_xml(output_ports)
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_child_node(self, name):
@@ -251,7 +264,7 @@ class Node:
 
         :param str name: The name of the child node.
 
-        :rtype: None|enarksh_lib.xml_generator.node.Node.Node
+        :rtype: enarksh_lib.xml_generator.node.Node.Node
         """
         ret = self.search_child_node(name)
         if not ret:
@@ -292,9 +305,9 @@ class Node:
         """
         Returns input port with 'name'. If no input port with 'name' exists an exception is thrown.
 
-        :param string name:
+        :param string name: The name of the port.
 
-        :rtype: None|enarksh_lib.xml_generator.port.Port.Port
+        :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
         ret = self.search_input_port(name)
 
@@ -329,7 +342,7 @@ class Node:
         """
         Returns output port with 'name'. If no output port with 'name' exists, an exception is thrown.
 
-        :param str name:
+        :param str name: The name of the output port.
 
         :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
@@ -418,6 +431,8 @@ class Node:
     def pre_generate_xml(self):
         """
         This function can be called before generation XML and is intended to be overloaded.
+
+        :rtype: None
         """
         # Nothing to do.
         pass
@@ -439,7 +454,7 @@ class Node:
     # ------------------------------------------------------------------------------------------------------------------
     def remove_child_node(self, node_name):
         """
-        Removes node 'node_name' as a child node. The dependencies of any successor of 'node' are been replaced
+        Removes node 'node_name' as a child node. The dependencies of any successor of 'node' will be replaced
         with all dependencies of the removed node.
 
         :param str node_name:
@@ -485,7 +500,7 @@ class Node:
         If this node has a child node with name 'name' that child node will be returned.
         If no child node with 'name' exists, returns None.
 
-        :param str name:
+        :param str name: The name of the child node.
 
         :rtype: None|enarksh_lib.xml_generator.node.Node.Node
         """
@@ -503,7 +518,7 @@ class Node:
         If this node has a input port with name 'name' that input port will be returned.
         If no input port with 'name' exists, returns None.
 
-        :param str name:
+        :param str name: The name of the input port.
 
         :rtype: None|enarksh_lib.xml_generator.port.InputPort.InputPort
         """
@@ -521,7 +536,7 @@ class Node:
         If this node has a output port with name 'name' that output port will be returned.
         If no output port with 'name' exists, returns None.
 
-        :param str name:
+        :param str name: The name of the output port.
 
         :rtype: None|enarksh_lib.xml_generator.port.InputPort.InputPort
         """

@@ -18,8 +18,9 @@ class Resource:
     def __init__(self, name):
         """
         Object constructor.
-        """
 
+        :param str name: The name of this resource.
+        """
         self._name = name
         """
         The name of this resource.
@@ -28,21 +29,25 @@ class Resource:
         """
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
-        """
-        Generates XML-code for this resource.
-
-        :param xml_tree:
-        """
-        resource_name = SubElement(xml_tree, 'ResourceName')
-        resource_name.text = self._name
-
-    # ------------------------------------------------------------------------------------------------------------------
     @abc.abstractmethod
-    def get_resource_type_tag(self):
+    def generate_xml(self, parent):
         """
-        Returns the XML-tag for the type of this resource.
+        Generates the XML element for this resource.
+
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+
+        :rtype: None
         """
         raise NotImplementedError()
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def _generate_xml_common(self, parent):
+        """
+        Generates the common XML elements of the XML element for this
+
+        :param xml.etree.ElementTree.Element parent: The parent XML element (i.e. the resource XML element).
+        """
+        resource_name = SubElement(parent, 'ResourceName')
+        resource_name.text = self._name
 
 # ----------------------------------------------------------------------------------------------------------------------

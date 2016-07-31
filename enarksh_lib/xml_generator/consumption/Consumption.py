@@ -28,21 +28,25 @@ class Consumption:
         """
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
-        """
-        Generates XML-code for this consumption.
-
-        :param xml_tree:
-        """
-        resource_name = SubElement(xml_tree, 'ResourceName')
-        resource_name.text = self._name
-
-    # ------------------------------------------------------------------------------------------------------------------
     @abc.abstractmethod
-    def get_consumption_type_tag(self):
+    def generate_xml(self, parent):
         """
-        Returns the XML-tag for the type of this consumption.
+        Generates the XML element for this consumption.
+
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+
+        :rtype: None
         """
         raise NotImplementedError()
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def generate_xml_common(self, parent):
+        """
+        Generates the common XML elements of the XML element for this consumption.
+
+        :param xml.etree.ElementTree.Element parent: The parent XML element (i.e. the consumption XML element).
+        """
+        resource_name = SubElement(parent, 'ResourceName')
+        resource_name.text = self._name
 
 # ----------------------------------------------------------------------------------------------------------------------

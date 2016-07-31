@@ -19,6 +19,9 @@ class ReadWriteLockConsumption(Consumption):
     def __init__(self, name, mode):
         """
         Object constructor.
+
+        :param str name: The name of this consumption.
+        :param str mode: The mode of the consumption. Valid values are: 'read' and 'write'.
         """
         Consumption.__init__(self, name)
 
@@ -30,20 +33,17 @@ class ReadWriteLockConsumption(Consumption):
         """
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    def generate_xml(self, parent):
         """
-        :param xml_tree:
-        """
-        Consumption.generate_xml(self, xml_tree)
+        Generates the XML element for this consumption.
 
-        mode = SubElement(xml_tree, 'Mode')
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+        """
+        consumption = SubElement(parent, 'ReadWriteLockConsumption')
+
+        self.generate_xml_common(consumption)
+
+        mode = SubElement(consumption, 'Mode')
         mode.text = self._mode
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_consumption_type_tag(self):
-        """
-        :rtype: str
-        """
-        return 'ReadWriteLockConsumption'
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -16,12 +16,14 @@ class CompoundJobNode(Node):
     """
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    def generate_xml(self, parent):
         """
-        :param xml_tree:
-        """
-        compound_job = SubElement(xml_tree, 'CompoundJob')
+        Generates the XML element for this node.
 
-        Node.generate_xml(self, compound_job)
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
+        """
+        compound_job = SubElement(parent, 'CompoundJob')
+
+        self._generate_xml_common(compound_job)
 
 # ----------------------------------------------------------------------------------------------------------------------

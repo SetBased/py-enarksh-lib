@@ -59,7 +59,7 @@ class Port:
         """
         Add a port as a dependency of this port.
 
-        :param enarksh_lib.xml_generator.port.Port.Port port:
+        :param enarksh_lib.xml_generator.port.Port.Port port: The port that depends on this port.
         """
         # -- @todo Validate owner of port and owner of this port.
 
@@ -67,19 +67,29 @@ class Port:
             self._predecessors.append(port)
 
     # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml(self, xml_tree):
+    def generate_xml(self, parent):
         """
-        Writes into xml.
+        Generates the XML element for this port.
+
+        :param xml.etree.ElementTree.Element parent: The parent XML element.
         """
-        port_name = SubElement(xml_tree, 'PortName')
+        port = SubElement(parent, 'Port')
+
+        port_name = SubElement(port, 'PortName')
         port_name.text = self._port_name
 
         if self._predecessors:
-            dependencies_element = SubElement(xml_tree, 'Dependencies')
+            dependencies_element = SubElement(port, 'Dependencies')
 
-            for pred in self._predecessors:
+            for predecessor in self._predecessors:
                 dependency = SubElement(dependencies_element, 'Dependency')
-                pred.generate_xml_dependant(dependency, self._node.get_parent())
+
+                node_name = SubElement(dependency, 'NodeName')
+                node_name.text = self.NODE_SELF_NAME if predecessor._node == self._node.get_parent() \
+                    else self._node.get_name()
+
+                port_name = SubElement(dependency, 'PortName')
+                port_name.text = self._port_name
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_all_dependencies(self):
@@ -93,8 +103,9 @@ class Port:
     # ------------------------------------------------------------------------------------------------------------------
     def get_dependencies_ports(self, ports, level):
         """
+
         :param list[enarksh_lib.xml_generator.port.Port.Port] ports:
-        :param int                                                level:
+        :param int                                            level:
 
         :rtype: list[]
         """
@@ -109,7 +120,7 @@ class Port:
     def get_implicit_dependencies_ports(self, ports, level):
         """
         :param list[enarksh_lib.xml_generator.port.Port.Port] ports:
-        :param int                                                level:
+        :param int                                            level:
         """
         raise NotImplementedError()
 
@@ -134,7 +145,7 @@ class Port:
     # ------------------------------------------------------------------------------------------------------------------
     def get_node_name(self):
         """
-        Returns the node name of this port.
+        Returns the name of the node to which this port belongs.
 
         :rtype: str
         """
@@ -184,25 +195,5 @@ class Port:
             # And replace those dependencies with 'dependencies'.
             for dep in dependencies:
                 self._predecessors.append(dep)
-
-    # ------------------------------------------------------------------------------------------------------------------
-    @abc.abstractmethod
-    def get_port_type_tag(self):
-        """
-        :rtype: str
-        """
-        raise NotImplementedError()
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def generate_xml_dependant(self, xml_tree, parent_node):
-        """
-        :param xml_tree:
-        :param enarksh_lib.xml_generator.node.Node.Node parent_node:
-        """
-        node_name = SubElement(xml_tree, 'NodeName')
-        node_name.text = self.NODE_SELF_NAME if self._node == parent_node else self._node.get_name()
-
-        port = SubElement(xml_tree, 'PortName')
-        port.text = self._port_name
 
 # ----------------------------------------------------------------------------------------------------------------------
