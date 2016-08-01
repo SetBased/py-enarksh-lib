@@ -12,7 +12,7 @@ from enarksh_lib.xml_generator.port.InputPort import InputPort
 from enarksh_lib.xml_generator.port.OutputPort import OutputPort
 
 
-class Node:
+class Node(metaclass=abc.ABCMeta):
     """
     Class for generating XML messages for elements of type 'NodeType'.
     """

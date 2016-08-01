@@ -9,7 +9,7 @@ import abc
 from xml.etree.ElementTree import SubElement
 
 
-class Port:
+class Port(metaclass=abc.ABCMeta):
     """
     Class Port
     Class for generating XML messages for elements of type 'InputPortType' and 'OutputPortType'.

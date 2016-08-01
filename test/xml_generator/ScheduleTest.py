@@ -4,6 +4,7 @@ import unittest
 from enarksh_lib.xml_generator.node.CommandJobNode import CommandJobNode
 from enarksh_lib.xml_generator.node.CompoundJobNode import CompoundJobNode
 from enarksh_lib.xml_generator.node.ManualTriggerNode import ManualTriggerNode
+from enarksh_lib.xml_generator.node.Node import Node
 from enarksh_lib.xml_generator.node.ScheduleNode import ScheduleNode
 from enarksh_lib.xml_generator.node.TerminatorNode import TerminatorNode
 from enarksh_lib.xml_generator.port.InputPort import InputPort

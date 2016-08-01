@@ -9,7 +9,7 @@ import abc
 from xml.etree.ElementTree import SubElement
 
 
-class Resource:
+class Resource(metaclass=abc.ABCMeta):
     """
     Class for generating XML messages for elements of type 'ResourceType'.
     """
