@@ -146,28 +146,6 @@ class Node:
         succ_port.add_dependency(pred_port)
 
     # ------------------------------------------------------------------------------------------------------------------
-    def add_dependency_all_input_ports(self):
-        """
-        Add dependencies between the 'all' input port of this node and the 'all' input port of all this child nodes.
-        """
-        parent_port = self.get_input_port(self.ALL_PORT_NAME)
-
-        for node in self.child_nodes:
-            child_port = node.get_input_port(self.ALL_PORT_NAME)
-            child_port.add_dependency(parent_port)
-
-    # ------------------------------------------------------------------------------------------------------------------
-    def add_dependency_all_output_ports(self):
-        """
-        Add dependencies between the 'all' output port of this node and the 'all' output of all this child nodes.
-        """
-        parent_port = self.get_output_port(self.ALL_PORT_NAME)
-
-        for node in self.child_nodes:
-            child_port = node.get_output_port(self.ALL_PORT_NAME)
-            parent_port.add_dependency(child_port)
-
-    # ------------------------------------------------------------------------------------------------------------------
     def finalize(self):
         """
         Ensures that all required dependencies between the 'all' input and output ports are present and removes
@@ -482,6 +460,43 @@ class Node:
         return ret
 
     # ------------------------------------------------------------------------------------------------------------------
+    def ensure_dependencies_input_port(self):
+        """
+        Ensures that the input port 'all' of all child nodes depends on input port 'all' of this node.
+        """
+        parent_port = self.get_input_port(self.ALL_PORT_NAME)  # Ensure we have create the 'all' input port.
+
+        if len(self.input_ports) > 1:
+            raise ValueError("Compound node '{0}' has additional input ports therefore {1} must "
+                             "override this method.".format(self.name, self.__class__))
+
+        for node in self.child_nodes:
+            child_port = node.get_input_port(self.ALL_PORT_NAME)
+            child_port.add_dependency(parent_port)
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def ensure_dependencies_output_port(self):
+        """
+        Ensures that output port 'all' of the node depends on all output ports 'all' of all child nodes.
+        """
+        parent_port = self.get_output_port(self.ALL_PORT_NAME)
+
+        for node in self.child_nodes:
+            child_port = node.get_output_port(self.ALL_PORT_NAME)
+            parent_port.add_dependency(child_port)
+
+    # ------------------------------------------------------------------------------------------------------------------
+    def ensure_dependencies_self(self):
+        """
+        Ensures input port 'all' of this node depends on output 'all' of each predecessor of this node.
+        """
+        input_port_all = self.get_input_port(self.ALL_PORT_NAME)
+        for input_port in self.input_ports:
+            for port in input_port.predecessors:
+                if port.node != self.parent:
+                    input_port_all.add_dependency(port.node.get_output_port(self.ALL_PORT_NAME))
+
+    # ------------------------------------------------------------------------------------------------------------------
     def ensure_dependencies(self):
         """
         Creates the following dependencies:
@@ -498,17 +513,8 @@ class Node:
             for node in self.child_nodes:
                 node.ensure_dependencies()
 
-            # Ensure that the input port 'all' of all child nodes depends on input port 'all' of this node.
-            self.add_dependency_all_input_ports()
-
-            # Ensure that output port 'all' of the node depends on all output ports 'all' of all child nodes.
-            self.add_dependency_all_output_ports()
-
-            # Ensure input port 'all' of this node depends on output 'all' of each predecessor of this node.
-            input_port_all = self.get_input_port(self.ALL_PORT_NAME)
-            for input_port in self.input_ports:
-                for port in input_port.predecessors:
-                    if port.node != self.parent:
-                        input_port_all.add_dependency(port.node.get_output_port(self.ALL_PORT_NAME))
+            self.ensure_dependencies_input_port()
+            self.ensure_dependencies_output_port()
+            self.ensure_dependencies_self()
 
 # ----------------------------------------------------------------------------------------------------------------------
