@@ -15,8 +15,6 @@ class TerminatorNode(Node):
     Class for generating XML messages for elements of type 'TerminatorType'.
     """
 
-    # -- @todo validate node has only one input port and no output ports.
-
     # ------------------------------------------------------------------------------------------------------------------
     def generate_xml(self, parent):
         """

@@ -15,8 +15,6 @@ class ManualTriggerNode(Node):
     Class for generating XML messages for elements of type 'ManualTriggerType'.
     """
 
-    # -- @todo validate node has no input ports and only one output port.
-
     # ------------------------------------------------------------------------------------------------------------------
     def generate_xml(self, parent):
         """

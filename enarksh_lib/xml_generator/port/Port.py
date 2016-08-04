@@ -15,7 +15,7 @@ class Port(metaclass=abc.ABCMeta):
     Class for generating XML messages for elements of type 'InputPortType' and 'OutputPortType'.
     """
 
-    NODE_SELF_NAME = '.'  # -- @todo Discuss about this constant, because I can't import Node.
+    NODE_SELF_NAME = '.'  # -- @todo Discuss about this constant, because we can't import Node.
     """
     Token for node self.
     """
@@ -61,8 +61,6 @@ class Port(metaclass=abc.ABCMeta):
 
         :param enarksh_lib.xml_generator.port.Port.Port port: The port that depends on this port.
         """
-        # -- @todo Validate owner of port and owner of this port.
-
         if port not in self.predecessors:
             self.predecessors.append(port)
 

@@ -109,10 +109,6 @@ class Node(metaclass=abc.ABCMeta):
 
         :param enarksh_lib.xml_generator.node.Node.Node child_node: The new child node.
         """
-        # -- @todo Test node exists.
-        # -- @todo Test node is not self.
-        # -- @todo Test parent node is not set.
-
         self.child_nodes.append(child_node)
         child_node.parent = self
 
@@ -137,7 +133,7 @@ class Node(metaclass=abc.ABCMeta):
             succ_node = self.get_child_node(successor_node_name)
             succ_port = succ_node.get_input_port(successor_port_name)
 
-        if predecessor_node_name == '.':
+        if predecessor_node_name == self.NODE_SELF_NAME:
             pred_port = self.get_input_port(predecessor_port_name)
         else:
             pred_node = self.get_child_node(predecessor_node_name)
@@ -301,7 +297,6 @@ class Node(metaclass=abc.ABCMeta):
 
         :rtype: str
         """
-        # -- @todo detect recursion
         path = self.parent.get_path() if self.parent else "/"
 
         return path + self.name
@@ -315,8 +310,6 @@ class Node(metaclass=abc.ABCMeta):
 
         :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
-        # -- @todo test port already exists.
-
         port = InputPort(self, name)
         self.input_ports.append(port)
 
@@ -331,8 +324,6 @@ class Node(metaclass=abc.ABCMeta):
 
         :rtype: enarksh_lib.xml_generator.port.Port.Port
         """
-        # -- @todo test port already exists.
-
         port = OutputPort(self, name)
         self.output_ports.append(port)
 
