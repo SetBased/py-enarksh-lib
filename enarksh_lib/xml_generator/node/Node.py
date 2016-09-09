@@ -184,17 +184,23 @@ class Node(metaclass=abc.ABCMeta):
             for port in self.input_ports:
                 port.generate_xml(input_ports)
 
-        # Generate XML for resources.
-        if self.resources:
-            resources = SubElement(parent, 'Resources')
-            for resource in self.resources:
-                resource.generate_xml(resources)
-
         # Generate XML for consumptions.
         if self.consumptions:
             consumptions = SubElement(parent, 'Consumptions')
             for consumption in self.consumptions:
                 consumption.generate_xml(consumptions)
+
+        # Generate XML for output ports.
+        if self.output_ports:
+            output_ports = SubElement(parent, 'OutputPorts')
+            for port in self.output_ports:
+                port.generate_xml(output_ports)
+
+        # Generate XML for resources.
+        if self.resources:
+            resources = SubElement(parent, 'Resources')
+            for resource in self.resources:
+                resource.generate_xml(resources)
 
         # Generate XML for nodes.
         if self.child_nodes:
@@ -202,12 +208,6 @@ class Node(metaclass=abc.ABCMeta):
             for node in self.child_nodes:
                 node.pre_generate_xml()
                 node.generate_xml(child_nodes)
-
-        # Generate XML for output ports.
-        if self.output_ports:
-            output_ports = SubElement(parent, 'OutputPorts')
-            for port in self.output_ports:
-                port.generate_xml(output_ports)
 
     # ------------------------------------------------------------------------------------------------------------------
     def get_child_node(self, name):
